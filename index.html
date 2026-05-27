@@ -118,6 +118,32 @@ html, body {
   flex-shrink: 0;
 }
 
+/* ── Model selector ── */
+.model-pills {
+  display: flex;
+  gap: 5px;
+  margin-top: 3px;
+}
+.model-pill {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 20px;
+  cursor: pointer;
+  border: 1.5px solid rgba(255,255,255,0.45);
+  color: rgba(255,255,255,0.72);
+  background: transparent;
+  transition: background .15s, color .15s, border-color .15s;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+  user-select: none;
+}
+.model-pill.active {
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+  border-color: rgba(255,255,255,0.85);
+}
+
 /* ── Messages ── */
 .messages {
   flex: 1;
@@ -366,6 +392,10 @@ html, body {
     <div class="avatar-wrap" id="headerAvatar"></div>
     <div class="header-info">
       <div class="header-name">Zone2 大師</div>
+      <div class="model-pills">
+        <div class="model-pill active" id="pill-qwen" onclick="setModel('qwen3.5:9b')">qwen3.5:9b</div>
+        <div class="model-pill" id="pill-gemma" onclick="setModel('gemma4:e4b')">gemma4:e4b</div>
+      </div>
     </div>
     <div class="header-menu">⋯</div>
   </div>
@@ -478,6 +508,13 @@ const AVATAR_SVG = `<svg viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg
 
 let history = [];
 let busy = false;
+let currentModel = 'qwen3.5:9b';
+
+function setModel(m) {
+  currentModel = m;
+  document.getElementById('pill-qwen').classList.toggle('active', m === 'qwen3.5:9b');
+  document.getElementById('pill-gemma').classList.toggle('active', m === 'gemma4:e4b');
+}
 
 function now() {
   const d = new Date();
@@ -574,7 +611,7 @@ async function send() {
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
-        model:'qwen3.5:9b',
+        model: currentModel,
         messages:[{role:'system',content:SYSTEM}, ...history],
         stream:false
       })
