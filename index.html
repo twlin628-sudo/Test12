@@ -263,6 +263,8 @@ html, body {
 
 /* ── Input bar ── */
 .input-bar {
+  width: 100%;
+  max-width: 100%;
   background: var(--input-bar);
   border-top: 1px solid rgba(0,0,0,0.09);
   padding: 8px 10px;
@@ -270,6 +272,7 @@ html, body {
   display: flex;
   align-items: flex-end;
   gap: 8px;
+  overflow: hidden;
   flex-shrink: 0;
   position: relative;
   z-index: 10;
@@ -286,7 +289,8 @@ html, body {
 .side-icons span { cursor: pointer; line-height: 1; user-select: none; }
 
 .input-pill {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
   background: #fff;
   border-radius: 22px;
   display: flex;
@@ -333,6 +337,24 @@ html, body {
 /* read receipt */
 .read { font-size: 10px; color: var(--ts-me); margin-bottom: 2px; align-self: flex-end; }
 .row:not(.me) .read { display: none; }
+
+@media (max-width: 430px) {
+  .input-bar {
+    gap: 6px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .side-icons {
+    gap: 6px;
+    font-size: 20px;
+  }
+
+  .input-pill {
+    padding: 8px 10px;
+  }
+}
+
 </style>
 </head>
 <body>
