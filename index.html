@@ -342,14 +342,16 @@ function fmt(t) {
   if (!t) return '';
 
   const matches = [];
+  // token 不含底線，避免 marked.js 把 __TOKEN__ 當 Markdown 粗體破壞字串
+  const mkToken = (i) => `%%KATEX${i}%%`;
 
-  // 1a. 先處理 $$...$$ (display/block mode)，必須在 $...$ 之前，否則會被誤吃
+  // 1a. 先處理 $$...$$ (block mode)，必須在 $...$ 之前，否則被誤吃
   t = t.replace(/\$\$([\s\S]+?)\$\$/g, (match, formula) => {
     try {
       if (typeof katex === 'undefined') return match;
       const rendered = katex.renderToString(formula.trim(), { displayMode: true, throwOnError: false });
       matches.push(rendered);
-      return `__LATEX_TOKEN_${matches.length - 1}__`;
+      return mkToken(matches.length - 1);
     } catch (e) { return match; }
   });
 
@@ -359,16 +361,16 @@ function fmt(t) {
       if (typeof katex === 'undefined') return match;
       const rendered = katex.renderToString(formula.trim(), { displayMode: false, throwOnError: false });
       matches.push(rendered);
-      return `__LATEX_TOKEN_${matches.length - 1}__`;
+      return mkToken(matches.length - 1);
     } catch (e) { return match; }
   });
 
-  // 2. Marked.js 渲染 Markdown（###, ---, 條列、粗體等）
+  // 2. Marked.js 渲染 Markdown
   let htmlOutput = marked.parse(t, { breaks: true });
 
   // 3. 填回已渲染的 LaTeX HTML
   matches.forEach((latexHtml, i) => {
-    htmlOutput = htmlOutput.replace(`__LATEX_TOKEN_${i}__`, latexHtml);
+    htmlOutput = htmlOutput.replace(mkToken(i), latexHtml);
   });
 
   return htmlOutput;
