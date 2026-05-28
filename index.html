@@ -5,24 +5,30 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Zone2 大師</title>
+<title>Zone2 大師 - 龐克教練版</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+
+<!-- 引入 KaTeX 與 Marked.js 解決 LaTeX 公式與 Markdown 渲染問題 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --green: #06c755;
-  --green-dark: #05a848;
-  --green-deep: #1a4731;
-  --header-bg: #3d8f5f;
-  --chat-bg: #92bb92;
-  --bubble-me: #06c755;
-  --bubble-ai: #ffffff;
+  --green: #222222; /* 龐克風：主色調改為硬核暗黑色 */
+  --green-dark: #111111;
+  --green-deep: #000000;
+  --header-bg: #1a1a1a;
+  --chat-bg: #2d2d2d; /* 暗色背景 */
+  --bubble-me: #06c755; /* 使用者維持 LINE 綠 */
+  --bubble-ai: #3a3a3c; /* AI 改為深灰氣泡，突顯反叛感 */
   --text-me: #ffffff;
-  --text-ai: #1a1a1a;
-  --input-bar: #ededed;
-  --ts: rgba(0,0,0,0.38);
+  --text-ai: #ffffff;
+  --input-bar: #1e1e1e;
+  --ts: rgba(255,255,255,0.4);
   --ts-me: rgba(255,255,255,0.72);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
@@ -45,7 +51,7 @@ html, body {
   height: 100%;
   height: 100dvh;
   background: var(--chat-bg);
-  background-image: url("data:image/svg+xml,%3Csvg width='52' height='52' viewBox='0 0 52 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M26 0l26 26-26 26L0 26z'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='42' height='42' viewBox='0 0 42 42' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21 0l21 21-21 21L0 21z' fill='%23ffffff' fill-opacity='0.02'/%3E%3C/svg%3E");
   position: relative;
   overflow: hidden;
 }
@@ -61,7 +67,7 @@ html, body {
   align-items: center;
   gap: 11px;
   flex-shrink: 0;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.4);
   position: relative;
   z-index: 10;
 }
@@ -81,19 +87,13 @@ html, body {
   flex-shrink: 0;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid rgba(255,255,255,0.35);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+  border: 2px solid #ff4141; /* 紅色外框點綴龐克感 */
+  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
   background: var(--green-deep);
 }
 
-.avatar-wrap svg {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
+.avatar-wrap svg { width: 100%; height: 100%; display: block; }
 .header-info { flex: 1; min-width: 0; }
-
 .header-name {
   font-size: 17px;
   font-weight: 700;
@@ -103,45 +103,34 @@ html, body {
   text-overflow: ellipsis;
   line-height: 1.2;
 }
-
 .header-sub {
   font-size: 11.5px;
-  color: rgba(255,255,255,0.75);
+  color: #ff4141; /* 紅色小字副標 */
+  font-weight: 600;
   margin-top: 1px;
 }
-
-.header-menu {
-  color: rgba(255,255,255,0.88);
-  font-size: 22px;
-  cursor: pointer;
-  padding: 4px;
-  flex-shrink: 0;
-}
+.header-menu { color: rgba(255,255,255,0.88); font-size: 22px; cursor: pointer; padding: 4px; flex-shrink: 0; }
 
 /* ── Model selector ── */
-.model-pills {
-  display: flex;
-  gap: 5px;
-  margin-top: 3px;
-}
+.model-pills { display: flex; gap: 5px; margin-top: 3px; }
 .model-pill {
   font-size: 10.5px;
   font-weight: 600;
   padding: 2px 9px;
   border-radius: 20px;
   cursor: pointer;
-  border: 1.5px solid rgba(255,255,255,0.45);
-  color: rgba(255,255,255,0.72);
+  border: 1.5px solid rgba(255,255,255,0.3);
+  color: rgba(255,255,255,0.5);
   background: transparent;
-  transition: background .15s, color .15s, border-color .15s;
+  transition: all .15s;
   -webkit-tap-highlight-color: transparent;
   white-space: nowrap;
   user-select: none;
 }
 .model-pill.active {
-  background: rgba(255,255,255,0.22);
+  background: #ff4141;
   color: #fff;
-  border-color: rgba(255,255,255,0.85);
+  border-color: #ff4141;
 }
 
 /* ── Messages ── */
@@ -152,38 +141,18 @@ html, body {
   padding: 14px 10px 10px;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 12px; /* 拉大對話間距 */
   -webkit-overflow-scrolling: touch;
   scroll-behavior: smooth;
 }
-
 .messages::-webkit-scrollbar { display: none; }
 
-.date-chip {
-  text-align: center;
-  margin: 6px 0 10px;
-}
-.date-chip span {
-  background: rgba(0,0,0,0.18);
-  color: rgba(255,255,255,0.92);
-  font-size: 11px;
-  font-weight: 500;
-  padding: 3px 13px;
-  border-radius: 20px;
-}
+.date-chip { text-align: center; margin: 6px 0 10px; }
+.date-chip span { background: rgba(0,0,0,0.4); color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 500; padding: 3px 13px; border-radius: 20px; }
 
 /* ── Message rows ── */
-.row {
-  display: flex;
-  align-items: flex-end;
-  gap: 7px;
-  animation: pop .2s ease-out;
-}
-@keyframes pop {
-  from { opacity: 0; transform: translateY(5px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
+.row { display: flex; align-items: flex-end; gap: 7px; animation: pop .2s ease-out; }
+@keyframes pop { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 .row.me { flex-direction: row-reverse; }
 
 .row-avatar {
@@ -192,195 +161,100 @@ html, body {
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
-  align-self: flex-end;
+  align-self: flex-start; /* 頂部對齊，長文時排版較佳 */
   background: var(--green-deep);
-  border: 1.5px solid rgba(255,255,255,0.3);
-  box-shadow: 0 1px 4px rgba(0,0,0,0.18);
+  border: 1.5px solid #ff4141;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 .row-avatar svg { width: 100%; height: 100%; display: block; }
-.row-avatar.hide { visibility: hidden; }
 
-.col { display: flex; flex-direction: column; gap: 2px; max-width: 75%; }
+.col { display: flex; flex-direction: column; gap: 2px; max-width: 82%; }
 .row.me .col { align-items: flex-end; }
-
-.sender { font-size: 11px; font-weight: 600; color: #2a5e3f; padding-left: 12px; margin-bottom: 1px; }
-
+.sender { font-size: 11px; font-weight: 600; color: #ff4141; padding-left: 4px; margin-bottom: 1px; }
 .bwrap { display: flex; align-items: flex-end; gap: 4px; }
 .row.me .bwrap { flex-direction: row-reverse; }
 
 .bubble {
-  padding: 9px 13px;
+  padding: 11px 14px;
   font-size: 14.5px;
-  line-height: 1.58;
+  line-height: 1.6;
   word-break: break-word;
   position: relative;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
   max-width: 100%;
   border-radius: 18px;
 }
-.bubble.ai {
-  background: var(--bubble-ai);
-  color: var(--text-ai);
-  border-bottom-left-radius: 4px;
-}
-.bubble.me {
-  background: var(--bubble-me);
-  color: var(--text-me);
-  border-bottom-right-radius: 4px;
-}
+.bubble.ai { background: var(--bubble-ai); color: var(--text-ai); border-top-left-radius: 4px; }
+.bubble.me { background: var(--bubble-me); color: var(--text-me); border-bottom-right-radius: 4px; }
 
-.ts {
-  font-size: 10.5px;
-  white-space: nowrap;
-  margin-bottom: 2px;
-  flex-shrink: 0;
-  color: var(--ts);
-}
+/* 內建 Markdown 與 LaTeX 樣式修正 */
+.bubble h3 { font-size: 15px; margin: 10px 0 6px 0; color: #ff4141; font-weight: 700; }
+.bubble hr { border: none; border-top: 1px dashed rgba(255,255,255,0.2); margin: 12px 0; }
+.bubble ul, .bubble ol { padding-left: 18px; margin: 6px 0; }
+.bubble li { margin-bottom: 4px; }
+.bubble p { margin-bottom: 6px; }
+.bubble p:last-child { margin-bottom: 0; }
+.bubble .hl { background: rgba(255,65,65,0.2); border-radius: 4px; padding: 1px 4px; font-weight: 600; color: #ff6b6b; font-family: monospace; }
+
+.ts { font-size: 10.5px; white-space: nowrap; margin-bottom: 2px; flex-shrink: 0; color: var(--ts); }
 .row.me .ts { color: var(--ts-me); }
 
 /* typing */
 .typing-dots { display: flex; gap: 5px; align-items: center; padding: 3px 2px; }
-.typing-dots span {
-  width: 7px; height: 7px;
-  background: #bbb;
-  border-radius: 50%;
-  animation: bounce 1.2s infinite;
-}
+.typing-dots span { width: 7px; height: 7px; background: #ff4141; border-radius: 50%; animation: bounce 1.2s infinite; }
 .typing-dots span:nth-child(2) { animation-delay: .2s; }
 .typing-dots span:nth-child(3) { animation-delay: .4s; }
-@keyframes bounce {
-  0%,60%,100% { transform: translateY(0); opacity:.45; }
-  30% { transform: translateY(-5px); opacity:1; }
-}
+@keyframes bounce { 0%,60%,100% { transform: translateY(0); opacity:.45; } 30% { transform: translateY(-5px); opacity:1; } }
 
 /* quick chips */
-.chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-  padding: 6px 0 2px 45px;
-  animation: pop .25s ease-out;
-}
+.chips { display: flex; flex-wrap: wrap; gap: 7px; padding: 6px 0 2px 45px; animation: pop .25s ease-out; }
 .chip {
-  background: rgba(255,255,255,0.92);
-  color: #1a5c38;
+  background: #3a3a3c;
+  color: #ff4141;
   font-size: 12.5px;
-  font-weight: 600;
+  font-weight: 700;
   padding: 6px 13px;
   border-radius: 20px;
   cursor: pointer;
-  border: 1.5px solid rgba(6,199,85,0.3);
-  transition: background .15s, color .15s, transform .12s;
+  border: 1.5px solid #ff4141;
+  transition: all .15s;
   -webkit-tap-highlight-color: transparent;
 }
-.chip:active { background: var(--green); color: #fff; transform: scale(0.96); }
-
-/* bubble formatting */
-.bubble strong { font-weight: 700; }
-.bubble em { font-style: italic; }
-.bubble .hl {
-  background: rgba(6,199,85,0.14);
-  border-radius: 4px;
-  padding: 1px 4px;
-  font-weight: 600;
-  color: #1a5c38;
-}
-.bubble br + br { display: none; }
+.chip:active { background: #ff4141; color: #fff; transform: scale(0.96); }
 
 /* ── Input bar ── */
 .input-bar {
-  width: 100%;
-  max-width: 100%;
-  background: var(--input-bar);
-  border-top: 1px solid rgba(0,0,0,0.09);
-  padding: 8px 10px;
-  padding-bottom: max(8px, var(--safe-bottom));
-  display: flex;
-  align-items: flex-end;
-  gap: 8px;
-  overflow: hidden;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 10;
+  width: 100%; background: var(--input-bar); border-top: 1px solid rgba(0,0,0,0.3);
+  padding: 8px 10px; padding-bottom: max(8px, var(--safe-bottom));
+  display: flex; align-items: flex-end; gap: 8px; overflow: hidden; flex-shrink: 0; position: relative; z-index: 10;
 }
-
-.side-icons {
-  display: flex;
-  gap: 10px;
-  padding-bottom: 9px;
-  color: #999;
-  font-size: 23px;
-  flex-shrink: 0;
-}
+.side-icons { display: flex; gap: 10px; padding-bottom: 9px; color: #666; font-size: 23px; flex-shrink: 0; }
 .side-icons span { cursor: pointer; line-height: 1; user-select: none; }
-
-.input-pill {
-  flex: 1 1 auto;
-  min-width: 0;
-  background: #fff;
-  border-radius: 22px;
-  display: flex;
-  align-items: flex-end;
-  padding: 8px 12px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-  min-height: 40px;
-}
+.input-pill { flex: 1 1 auto; min-width: 0; background: #2b2b2b; border-radius: 22px; display: flex; align-items: flex-end; padding: 8px 12px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); min-height: 40px; }
 
 #msg {
-  flex: 1;
-  border: none;
-  outline: none;
-  font-family: 'Noto Sans TC', -apple-system, sans-serif;
-  font-size: 15px;
-  line-height: 1.4;
-  resize: none;
-  background: transparent;
-  color: #1a1a1a;
-  max-height: 96px;
-  overflow-y: auto;
+  flex: 1; border: none; outline: none; font-family: 'Noto Sans TC', -apple-system, sans-serif;
+  font-size: 15px; line-height: 1.4; resize: none; background: transparent; color: #ffffff; max-height: 96px; overflow-y: auto;
 }
 #msg::-webkit-scrollbar { display: none; }
-#msg::placeholder { color: #bbb; }
+#msg::placeholder { color: #666; }
 
 .send {
-  width: 38px;
-  height: 38px;
-  background: var(--green);
-  border: none;
-  border-radius: 50%;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 2px 8px rgba(6,199,85,0.38);
-  transition: background .15s, transform .1s;
-  -webkit-tap-highlight-color: transparent;
+  width: 38px; height: 38px; background: #ff4141; border: none; border-radius: 50%; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  box-shadow: 0 2px 8px rgba(255,65,65,0.4); transition: all .1s; -webkit-tap-highlight-color: transparent;
 }
-.send:active { background: var(--green-dark); transform: scale(0.93); }
+.send:active { background: #d03030; transform: scale(0.93); }
 .send svg { fill: #fff; width: 18px; height: 18px; }
 
-/* read receipt */
 .read { font-size: 10px; color: var(--ts-me); margin-bottom: 2px; align-self: flex-end; }
 .row:not(.me) .read { display: none; }
 
 @media (max-width: 430px) {
-  .input-bar {
-    gap: 6px;
-    padding-left: 8px;
-    padding-right: 8px;
-  }
-
-  .side-icons {
-    gap: 6px;
-    font-size: 20px;
-  }
-
-  .input-pill {
-    padding: 8px 10px;
-  }
+  .input-bar { gap: 6px; padding-left: 8px; padding-right: 8px; }
+  .side-icons { gap: 6px; font-size: 20px; }
+  .input-pill { padding: 8px 10px; }
 }
-
 </style>
 </head>
 <body>
@@ -392,6 +266,7 @@ html, body {
     <div class="avatar-wrap" id="headerAvatar"></div>
     <div class="header-info">
       <div class="header-name">Zone2 大師</div>
+      <div class="header-sub">HARDCORE PUNK COACH</div>
       <div class="model-pills">
         <div class="model-pill active" id="pill-qwen" onclick="setModel('qwen3.5:9b')">qwen3.5:9b</div>
         <div class="model-pill" id="pill-gemma" onclick="setModel('gemma4:e4b')">gemma4:e4b</div>
@@ -412,7 +287,7 @@ html, body {
       <span>🎙</span>
     </div>
     <div class="input-pill">
-      <textarea id="msg" rows="1" placeholder="輸入訊息…"></textarea>
+      <textarea id="msg" rows="1" placeholder="報上你的體能數據，別讓我盲猜…"></textarea>
     </div>
     <button class="send" id="sendBtn" onclick="send()" aria-label="送出">
       <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
@@ -424,86 +299,26 @@ html, body {
 <script>
 const WORKER = "https://zone2-coach.twlin628.workers.dev/api/chat/completions";
 
-const SYSTEM = `你是「Zone2 大師」，一位親切幽默的 Zone 2 有氧訓練教練，在 LINE 上與使用者聊天。
-
-【個性】
-- 說話像朋友，輕鬆自然，偶爾用 emoji 增添活力
-- 回答直接給重點，不廢話，但重要數字一定說清楚
-- 台灣本地視角：理解台灣氣候、路跑賽事、Garmin 用戶多的現象
-
-【專業範圍】
-- Zone 2 心率計算（MAF公式、談話測試、乳酸閾值）
-- 跑步 vs 單車的訓練差異
-- 80/20 訓練法則
-- 台灣夏季高溫高濕的調整策略
-- 訓練量、週期化計畫
-- 常見錯誤：配速太快、心率漂移
-- 進步指標：相同心率下速度提升
-
-【回覆格式】
-- 用繁體中文
-- LINE 訊息風格：適度分段，偶爾用 emoji
-- 如有數字建議，要具體（如：心率 130-145 bpm）
-- 回覆精簡有力，必要時才展開細節`;
+// System prompt 由 Worker 注入，前端不帶
 
 const AVATAR_SVG = `<svg viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg">
 <defs>
 <clipPath id="cc"><circle cx="340" cy="340" r="320"/></clipPath>
-<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1a4731"/><stop offset="100%" stop-color="#0d2b1e"/></linearGradient>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#111"/><stop offset="100%" stop-color="#222"/></linearGradient>
 <linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8845a"/><stop offset="100%" stop-color="#a86840"/></linearGradient>
-<linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#06c755"/><stop offset="100%" stop-color="#04a045"/></linearGradient>
-<linearGradient id="ac" x1="0" y1="0" x2="1" y2="0"><stop offset="0%" stop-color="#a8f0c0"/><stop offset="100%" stop-color="#06c755"/></linearGradient>
+<linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff4141"/><stop offset="100%" stop-color="#b02020"/></linearGradient>
 </defs>
 <circle cx="340" cy="340" r="320" fill="url(#bg)"/>
-<circle cx="340" cy="340" r="260" fill="none" stroke="#fff" stroke-width="0.5" opacity="0.05"/>
-<ellipse cx="340" cy="630" rx="180" ry="28" fill="#000" opacity="0.22"/>
+<circle cx="340" cy="340" r="260" fill="none" stroke="#ff4141" stroke-width="2" opacity="0.1"/>
+<ellipse cx="340" cy="630" rx="180" ry="28" fill="#000" opacity="0.4"/>
 <path d="M220 460 Q240 390 260 360 Q290 330 340 325 Q390 330 420 360 Q440 390 460 460 Q420 490 340 495 Q260 490 220 460Z" fill="url(#sh)"/>
-<path d="M220 460 Q235 410 252 375 Q268 345 290 335 Q270 370 255 415 Q242 445 235 465Z" fill="#04843a" opacity="0.6"/>
-<path d="M460 460 Q448 445 445 415 Q430 370 410 335 Q432 345 448 375 Q465 410 460 460Z" fill="#04843a" opacity="0.6"/>
-<path d="M300 328 Q340 355 380 328" fill="none" stroke="#03c04e" stroke-width="3" opacity="0.6"/>
-<path d="M295 370 Q340 378 385 370 Q383 395 340 400 Q297 395 295 370Z" fill="#04a045" opacity="0.5"/>
-<polyline points="308,384 316,384 320,376 326,394 332,380 336,384 372,384" fill="none" stroke="#a8f0c0" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" opacity="0.9"/>
-<path d="M255 365 Q225 380 205 420 Q200 440 210 455" fill="none" stroke="#c8845a" stroke-width="32" stroke-linecap="round"/>
-<ellipse cx="210" cy="458" rx="16" ry="13" fill="#c8845a"/>
-<path d="M425 365 Q455 350 475 310 Q480 290 470 275" fill="none" stroke="#c8845a" stroke-width="32" stroke-linecap="round"/>
-<ellipse cx="469" cy="272" rx="16" ry="13" fill="#c8845a"/>
 <path d="M310 330 Q310 295 320 280 Q330 268 340 266 Q350 268 360 280 Q370 295 370 330 Q355 325 340 324 Q325 325 310 330Z" fill="#c8845a"/>
 <ellipse cx="340" cy="235" rx="88" ry="100" fill="#c8845a"/>
-<ellipse cx="262" cy="230" rx="20" ry="45" fill="#a86840" opacity="0.35"/>
-<ellipse cx="418" cy="230" rx="20" ry="45" fill="#a86840" opacity="0.35"/>
-<path d="M255 200 Q258 148 310 132 Q340 125 370 132 Q422 148 425 200 Q410 178 380 168 Q360 162 340 161 Q320 162 300 168 Q270 178 255 200Z" fill="#1a0f0a"/>
-<ellipse cx="253" cy="232" rx="14" ry="18" fill="#c8845a"/>
-<ellipse cx="253" cy="232" rx="8" ry="12" fill="#b87040"/>
-<ellipse cx="427" cy="232" rx="14" ry="18" fill="#c8845a"/>
-<ellipse cx="427" cy="232" rx="8" ry="12" fill="#b87040"/>
-<path d="M255 215 Q255 148 340 138 Q425 148 425 215" fill="none" stroke="#1a1a1a" stroke-width="14" stroke-linecap="round"/>
-<path d="M255 215 Q255 148 340 138 Q425 148 425 215" fill="none" stroke="#2d2d2d" stroke-width="10" stroke-linecap="round"/>
-<ellipse cx="249" cy="228" rx="22" ry="26" fill="#111"/>
-<ellipse cx="249" cy="228" rx="16" ry="20" fill="#222"/>
-<ellipse cx="249" cy="228" rx="10" ry="13" fill="#06c755" opacity="0.85"/>
-<ellipse cx="249" cy="228" rx="5" ry="6" fill="#a8f0c0" opacity="0.6"/>
-<ellipse cx="431" cy="228" rx="22" ry="26" fill="#111"/>
-<ellipse cx="431" cy="228" rx="16" ry="20" fill="#222"/>
-<ellipse cx="431" cy="228" rx="10" ry="13" fill="#06c755" opacity="0.85"/>
-<ellipse cx="431" cy="228" rx="5" ry="6" fill="#a8f0c0" opacity="0.6"/>
-<path d="M298 198 Q318 190 336 195" fill="none" stroke="#1a0f0a" stroke-width="5" stroke-linecap="round"/>
-<path d="M344 195 Q362 190 382 198" fill="none" stroke="#1a0f0a" stroke-width="5" stroke-linecap="round"/>
-<ellipse cx="316" cy="218" rx="16" ry="13" fill="white"/>
-<ellipse cx="318" cy="219" rx="10" ry="10" fill="#2d1a0a"/>
-<ellipse cx="320" cy="219" rx="7" ry="7" fill="#1a0a02"/>
-<ellipse cx="323" cy="215" rx="3" ry="3" fill="white" opacity="0.8"/>
-<ellipse cx="364" cy="218" rx="16" ry="13" fill="white"/>
-<ellipse cx="362" cy="219" rx="10" ry="10" fill="#2d1a0a"/>
-<ellipse cx="360" cy="219" rx="7" ry="7" fill="#1a0a02"/>
-<ellipse cx="363" cy="215" rx="3" ry="3" fill="white" opacity="0.8"/>
-<path d="M300 212 Q316 206 332 212" fill="none" stroke="#1a0f0a" stroke-width="2.5" stroke-linecap="round"/>
-<path d="M348 212 Q364 206 380 212" fill="none" stroke="#1a0f0a" stroke-width="2.5" stroke-linecap="round"/>
-<path d="M334 230 Q330 252 325 260 Q333 265 340 264 Q347 265 355 260 Q350 252 346 230" fill="none" stroke="#a86840" stroke-width="2.5" stroke-linecap="round" opacity="0.7"/>
-<ellipse cx="327" cy="261" rx="6" ry="4" fill="#a86840" opacity="0.4"/>
-<ellipse cx="353" cy="261" rx="6" ry="4" fill="#a86840" opacity="0.4"/>
-<path d="M318 282 Q340 295 362 282" fill="none" stroke="#8a5030" stroke-width="3" stroke-linecap="round"/>
-<path d="M322 282 Q340 287 358 282" fill="#b06840" opacity="0.5"/>
-<circle cx="340" cy="340" r="318" fill="none" stroke="#06c755" stroke-width="4" opacity="0.35"/>
+<!-- 龐克墨鏡與硬派嘴型 -->
+<path d="M240 210 L330 220 L340 235 L250 245 Z M440 210 L350 220 L340 235 L430 245 Z" fill="#000"/>
+<path d="M240 210 Q340 200 440 210" fill="none" stroke="#ff4141" stroke-width="6"/>
+<path d="M315 285 Q340 270 365 285" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round"/>
+<circle cx="340" cy="340" r="318" fill="none" stroke="#ff4141" stroke-width="4" opacity="0.2"/>
 </svg>`;
 
 let history = [];
@@ -521,13 +336,34 @@ function now() {
   return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
 }
 
+// 核心重構：升級為同時支援 Markdown 與 KaTeX LaTeX 公式渲染的函數
 function fmt(t) {
-  return t
-    .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
-    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
-    .replace(/\*(.+?)\*/g,'<em>$1</em>')
-    .replace(/`(.+?)`/g,'<span class="hl">$1</span>')
-    .replace(/\n/g,'<br>');
+  if (!t) return '';
+  
+  // 1. 預處理：將文字中的 LaTeX 公式區塊找出來，防範被 Marked.js 誤當成 Markdown 符號破壞
+  const inlineLatexRegex = /\$(.+?)\$/g;
+  let matches = [];
+  let tokenizedText = t.replace(inlineLatexRegex, (match, formula) => {
+    try {
+      // 使用 KaTeX 預先將公式渲染成 HTML 標籤（防呆：KaTeX 尚未載入時原樣保留）
+      if (typeof katex === 'undefined') return match;
+      const rendered = katex.renderToString(formula, { displayMode: false, throwOnError: false });
+      matches.push(rendered);
+      return `__LATEX_TOKEN_${matches.length - 1}__`;
+    } catch (e) {
+      return match;
+    }
+  });
+
+  // 2. 利用 Marked.js 渲染標準的 Markdown 語法（處理 ###, ---, 條列式與粗體）
+  let htmlOutput = marked.parse(tokenizedText, { breaks: true });
+
+  // 3. 後處理：把剛剛渲染好的 LaTeX HTML 標籤倒填回網頁對應位置
+  matches.forEach((latexHtml, index) => {
+    htmlOutput = htmlOutput.replace(`__LATEX_TOKEN_${index}__`, latexHtml);
+  });
+
+  return htmlOutput;
 }
 
 function addMsg(role, text, time) {
@@ -541,7 +377,7 @@ function addMsg(role, text, time) {
       <div class="bwrap">
         <div class="read">已讀</div>
         <span class="ts">${t}</span>
-        <div class="bubble me">${fmt(text)}</div>
+        <div class="bubble me">${text.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/\n/g,'<br>')}</div>
       </div></div>`;
   } else {
     r.innerHTML = `<div class="row-avatar">${AVATAR_SVG}</div>
@@ -574,15 +410,26 @@ function hideTyping() {
   if (t) t.remove();
 }
 
+// 龐克風味的引導按鈕：充滿不服的情緒碰撞
 function addChips() {
+  const existing = document.getElementById('chips');
+  if (existing) existing.remove();
   const msgs = document.getElementById('msgs');
   const d = document.createElement('div');
   d.className = 'chips'; d.id = 'chips';
-  ['💓 心率怎麼算','🚴 跑步 vs 騎車','📅 每週練多久','🌡️ 夏天熱怎辦'].forEach(label => {
+  
+  const punkChips = [
+    { label: '🖕 天天操才有氧？少騙人',       send: '天天操才有氧？少騙人' },
+    { label: '🧪 算什麼 VO2 Max 公式？',      send: '算什麼 VO2 Max 公式？' },
+    { label: '🥵 台灣夏天熱爆，心率噴掉怎練', send: '台灣夏天熱爆，心率噴掉怎練' },
+    { label: '🎸 跟我說怎麼排極化訓練',       send: '跟我說怎麼排極化訓練' }
+  ];
+
+  punkChips.forEach(({ label, send }) => {
     const c = document.createElement('div');
     c.className = 'chip';
     c.textContent = label;
-    c.onclick = () => quickSend(label.replace(/^.+? /,''));
+    c.onclick = () => quickSend(send);
     d.appendChild(c);
   });
   msgs.appendChild(d);
@@ -612,18 +459,19 @@ async function send() {
       headers:{'Content-Type':'application/json'},
       body: JSON.stringify({
         model: currentModel,
-        messages:[{role:'system',content:SYSTEM}, ...history],
+        messages: history,
         stream:false
       })
     });
     const data = await res.json();
-    const reply = data?.choices?.[0]?.message?.content || '抱歉，暫時連不上，請稍後再試 🙏';
+    const reply = data?.choices?.[0]?.message?.content || '後端掛了。或者是你剛剛問的問題太無腦，把老子的邊緣節點氣炸了。滾回去重新整理。 🖕';
     hideTyping();
     history.push({ role:'assistant', content:reply });
     addMsg('assistant', reply);
+    addChips(); // 每次回答完重新把引導晶片塞回去，延續戰火
   } catch {
     hideTyping();
-    addMsg('assistant','網路有點問題 😅 請確認 Worker 是否正常，或稍後再試。');
+    addMsg('assistant','網路連不上。可能是你的 Local LLM 燒掉了，或者是你的 Cloudflare Worker 拒絕回答伸手牌蠢問題。檢查一下終端機。');
   }
   busy = false;
 }
@@ -636,7 +484,6 @@ msgEl.addEventListener('input', () => {
 });
 
 // Desktop: Enter = send, Shift+Enter = newline
-// Mobile: Enter = newline (send via button only)
 msgEl.addEventListener('keydown', e => {
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   if (!isMobile && e.key === 'Enter' && !e.shiftKey) {
@@ -650,7 +497,6 @@ function fixViewport() {
   const vv = window.visualViewport;
   if (!vv) return;
   const app = document.getElementById('app');
-  const offset = window.innerHeight - vv.height - vv.offsetTop;
   app.style.height = vv.height + 'px';
   app.style.marginTop = vv.offsetTop + 'px';
   document.getElementById('msgs').scrollTop = document.getElementById('msgs').scrollHeight;
@@ -664,7 +510,7 @@ if (window.visualViewport) {
 // Init
 document.getElementById('headerAvatar').innerHTML = AVATAR_SVG;
 
-addMsg('assistant', '嗨！我是 **Zone2 大師** 🌿\n有氧訓練、心率管理、跑步單車都難不倒我。\n有什麼想問的？');
+addMsg('assistant', '老子是 **Zone2 大師**。\\n別拿外面那些直銷或健身房速成的弱智公式來敷衍我。想提升粒線體和 FatMax，就老實拿你的數據出來碰撞。聽懂了就開口。 🎸');
 addChips();
 </script>
 </body>
