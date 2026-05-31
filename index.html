@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<title>Zone2 大師 - 龐克教練版</title>
+<title>Zone2 大師</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 
@@ -18,16 +18,16 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --green: #222222; /* 龐克風：主色調改為硬核暗黑色 */
-  --green-dark: #111111;
-  --green-deep: #000000;
-  --header-bg: #1a1a1a;
-  --chat-bg: #2d2d2d; /* 暗色背景 */
-  --bubble-me: #06c755; /* 使用者維持 LINE 綠 */
-  --bubble-ai: #3a3a3c; /* AI 改為深灰氣泡，突顯反叛感 */
+  --green: #06c755;
+  --green-dark: #05a848;
+  --green-deep: #1a4731;
+  --header-bg: #3d8f5f;
+  --chat-bg: #92bb92;
+  --bubble-me: #06c755;
+  --bubble-ai: #ffffff;
   --text-me: #ffffff;
-  --text-ai: #ffffff;
-  --input-bar: #1e1e1e;
+  --text-ai: #1a1a1a;
+  --input-bar: #ededed;
   --ts: rgba(255,255,255,0.4);
   --ts-me: rgba(255,255,255,0.72);
   --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -51,7 +51,7 @@ html, body {
   height: 100%;
   height: 100dvh;
   background: var(--chat-bg);
-  background-image: url("data:image/svg+xml,%3Csvg width='42' height='42' viewBox='0 0 42 42' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M21 0l21 21-21 21L0 21z' fill='%23ffffff' fill-opacity='0.02'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg width='52' height='52' viewBox='0 0 52 52' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Cpath d='M26 0l26 26-26 26L0 26z'/%3E%3C/g%3E%3C/svg%3E");
   position: relative;
   overflow: hidden;
 }
@@ -87,7 +87,7 @@ html, body {
   flex-shrink: 0;
   border-radius: 50%;
   overflow: hidden;
-  border: 2px solid #ff4141; /* 紅色外框點綴龐克感 */
+  border: 2px solid rgba(255,255,255,0.35);
   box-shadow: 0 2px 8px rgba(0,0,0,0.5);
   background: var(--green-deep);
 }
@@ -105,7 +105,7 @@ html, body {
 }
 .header-sub {
   font-size: 11.5px;
-  color: #ff4141; /* 紅色小字副標 */
+  color: rgba(255,255,255,0.72);
   font-weight: 600;
   margin-top: 1px;
 }
@@ -128,9 +128,9 @@ html, body {
   user-select: none;
 }
 .model-pill.active {
-  background: #ff4141;
+  background: rgba(255,255,255,0.22);
   color: #fff;
-  border-color: #ff4141;
+  border-color: rgba(255,255,255,0.85);
 }
 
 /* ── Messages ── */
@@ -148,7 +148,7 @@ html, body {
 .messages::-webkit-scrollbar { display: none; }
 
 .date-chip { text-align: center; margin: 6px 0 10px; }
-.date-chip span { background: rgba(0,0,0,0.4); color: rgba(255,255,255,0.6); font-size: 11px; font-weight: 500; padding: 3px 13px; border-radius: 20px; }
+.date-chip span { background: rgba(0,0,0,0.18); color: rgba(255,255,255,0.92); font-size: 11px; font-weight: 500; padding: 3px 13px; border-radius: 20px; }
 
 /* ── Message rows ── */
 .row { display: flex; align-items: flex-end; gap: 7px; animation: pop .2s ease-out; }
@@ -163,14 +163,14 @@ html, body {
   flex-shrink: 0;
   align-self: flex-start; /* 頂部對齊，長文時排版較佳 */
   background: var(--green-deep);
-  border: 1.5px solid #ff4141;
+  border: 1.5px solid rgba(255,255,255,0.45);
   box-shadow: 0 1px 4px rgba(0,0,0,0.3);
 }
 .row-avatar svg { width: 100%; height: 100%; display: block; }
 
 .col { display: flex; flex-direction: column; gap: 2px; max-width: 82%; }
 .row.me .col { align-items: flex-end; }
-.sender { font-size: 11px; font-weight: 600; color: #ff4141; padding-left: 4px; margin-bottom: 1px; }
+.sender { font-size: 11px; font-weight: 600; color: #2a5e3f; padding-left: 4px; margin-bottom: 1px; }
 .bwrap { display: flex; align-items: flex-end; gap: 4px; }
 .row.me .bwrap { flex-direction: row-reverse; }
 
@@ -188,7 +188,7 @@ html, body {
 .bubble.me { background: var(--bubble-me); color: var(--text-me); border-bottom-right-radius: 4px; }
 
 /* 內建 Markdown 與 LaTeX 樣式修正 */
-.bubble h3 { font-size: 15px; margin: 10px 0 6px 0; color: #ff4141; font-weight: 700; }
+.bubble h3 { font-size: 15px; margin: 10px 0 6px 0; color: #1a5c38; font-weight: 700; }
 .bubble hr { border: none; border-top: 1px dashed rgba(255,255,255,0.2); margin: 12px 0; }
 .bubble ul, .bubble ol { padding-left: 18px; margin: 6px 0; }
 .bubble li { margin-bottom: 4px; }
@@ -202,7 +202,7 @@ html, body {
 
 /* typing */
 .typing-dots { display: flex; gap: 5px; align-items: center; padding: 3px 2px; }
-.typing-dots span { width: 7px; height: 7px; background: #ff4141; border-radius: 50%; animation: bounce 1.2s infinite; }
+.typing-dots span { width: 7px; height: 7px; background: #aaa; border-radius: 50%; animation: bounce 1.2s infinite; }
 .typing-dots span:nth-child(2) { animation-delay: .2s; }
 .typing-dots span:nth-child(3) { animation-delay: .4s; }
 @keyframes bounce { 0%,60%,100% { transform: translateY(0); opacity:.45; } 30% { transform: translateY(-5px); opacity:1; } }
@@ -210,38 +210,38 @@ html, body {
 /* quick chips */
 .chips { display: flex; flex-wrap: wrap; gap: 7px; padding: 6px 0 2px 45px; animation: pop .25s ease-out; }
 .chip {
-  background: #3a3a3c;
-  color: #ff4141;
+  background: rgba(255,255,255,0.92);
+  color: #1a5c38;
   font-size: 12.5px;
   font-weight: 700;
   padding: 6px 13px;
   border-radius: 20px;
   cursor: pointer;
-  border: 1.5px solid #ff4141;
+  border: 1.5px solid rgba(255,255,255,0.45);
   transition: all .15s;
   -webkit-tap-highlight-color: transparent;
 }
-.chip:active { background: #ff4141; color: #fff; transform: scale(0.96); }
+.chip:active { background: var(--green); color: #fff; transform: scale(0.96); }
 
 /* ── Input bar ── */
 .input-bar {
-  width: 100%; background: var(--input-bar); border-top: 1px solid rgba(0,0,0,0.3);
+  width: 100%; background: var(--input-bar); border-top: 1px solid rgba(0,0,0,0.09);
   padding: 8px 10px; padding-bottom: max(8px, var(--safe-bottom));
   display: flex; align-items: flex-end; gap: 8px; overflow: hidden; flex-shrink: 0; position: relative; z-index: 10;
 }
 .side-icons { display: flex; gap: 10px; padding-bottom: 9px; color: #666; font-size: 23px; flex-shrink: 0; }
 .side-icons span { cursor: pointer; line-height: 1; user-select: none; }
-.input-pill { flex: 1 1 auto; min-width: 0; background: #2b2b2b; border-radius: 22px; display: flex; align-items: flex-end; padding: 8px 12px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.5); min-height: 40px; }
+.input-pill { flex: 1 1 auto; min-width: 0; background: #fff; border-radius: 22px; display: flex; align-items: flex-end; padding: 8px 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); min-height: 40px; }
 
 #msg {
   flex: 1; border: none; outline: none; font-family: 'Noto Sans TC', -apple-system, sans-serif;
-  font-size: 15px; line-height: 1.4; resize: none; background: transparent; color: #ffffff; max-height: 96px; overflow-y: auto;
+  font-size: 15px; line-height: 1.4; resize: none; background: transparent; color: #1a1a1a; max-height: 96px; overflow-y: auto;
 }
 #msg::-webkit-scrollbar { display: none; }
-#msg::placeholder { color: #666; }
+#msg::placeholder { color: #bbb; }
 
 .send {
-  width: 38px; height: 38px; background: #ff4141; border: none; border-radius: 50%; cursor: pointer;
+  width: 38px; height: 38px; background: var(--green); border: none; border-radius: 50%; cursor: pointer;
   display: flex; align-items: center; justify-content: center; flex-shrink: 0;
   box-shadow: 0 2px 8px rgba(255,65,65,0.4); transition: all .1s; -webkit-tap-highlight-color: transparent;
 }
@@ -267,10 +267,10 @@ html, body {
     <div class="avatar-wrap" id="headerAvatar"></div>
     <div class="header-info">
       <div class="header-name">Zone2 大師</div>
-      <div class="header-sub">HARDCORE PUNK COACH</div>
+      <div class="header-sub">Zone 2 有氧訓練傳道師</div>
       <div class="model-pills">
-        <div class="model-pill active" id="pill-qwen" onclick="setModel('qwen3.5:9b')">qwen3.5:9b</div>
-        <div class="model-pill" id="pill-gemma" onclick="setModel('gemma4:e4b')">gemma4:e4b</div>
+        <div class="model-pill active" id="pill-gemma" onclick="setModel('gemma4:e4b')">gemma4:e4b</div>
+        <div class="model-pill" id="pill-qwen" onclick="setModel('qwen3.5:9b')">qwen3.5:9b</div>
       </div>
     </div>
     <div class="header-menu">⋯</div>
@@ -288,7 +288,7 @@ html, body {
       <span>🎙</span>
     </div>
     <div class="input-pill">
-      <textarea id="msg" rows="1" placeholder="報上你的體能數據，別讓我盲猜…"></textarea>
+      <textarea id="msg" rows="1" placeholder="輸入訊息…"></textarea>
     </div>
     <button class="send" id="sendBtn" onclick="send()" aria-label="送出">
       <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
@@ -307,29 +307,29 @@ const AVATAR_SVG = `<svg viewBox="0 0 680 680" xmlns="http://www.w3.org/2000/svg
 <clipPath id="cc"><circle cx="340" cy="340" r="320"/></clipPath>
 <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#111"/><stop offset="100%" stop-color="#222"/></linearGradient>
 <linearGradient id="sk" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#c8845a"/><stop offset="100%" stop-color="#a86840"/></linearGradient>
-<linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ff4141"/><stop offset="100%" stop-color="#b02020"/></linearGradient>
+<linearGradient id="sh" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#06c755"/><stop offset="100%" stop-color="#04a045"/></linearGradient>
 </defs>
 <circle cx="340" cy="340" r="320" fill="url(#bg)"/>
-<circle cx="340" cy="340" r="260" fill="none" stroke="#ff4141" stroke-width="2" opacity="0.1"/>
+<circle cx="340" cy="340" r="260" fill="none" stroke="#06c755" stroke-width="2" opacity="0.1"/>
 <ellipse cx="340" cy="630" rx="180" ry="28" fill="#000" opacity="0.4"/>
 <path d="M220 460 Q240 390 260 360 Q290 330 340 325 Q390 330 420 360 Q440 390 460 460 Q420 490 340 495 Q260 490 220 460Z" fill="url(#sh)"/>
 <path d="M310 330 Q310 295 320 280 Q330 268 340 266 Q350 268 360 280 Q370 295 370 330 Q355 325 340 324 Q325 325 310 330Z" fill="#c8845a"/>
 <ellipse cx="340" cy="235" rx="88" ry="100" fill="#c8845a"/>
-<!-- 龐克墨鏡與硬派嘴型 -->
+<!-- Zone2 大師頭像 -->
 <path d="M240 210 L330 220 L340 235 L250 245 Z M440 210 L350 220 L340 235 L430 245 Z" fill="#000"/>
-<path d="M240 210 Q340 200 440 210" fill="none" stroke="#ff4141" stroke-width="6"/>
+<path d="M240 210 Q340 200 440 210" fill="none" stroke="#06c755" stroke-width="6"/>
 <path d="M315 285 Q340 270 365 285" fill="none" stroke="#000" stroke-width="4" stroke-linecap="round"/>
-<circle cx="340" cy="340" r="318" fill="none" stroke="#ff4141" stroke-width="4" opacity="0.2"/>
+<circle cx="340" cy="340" r="318" fill="none" stroke="#06c755" stroke-width="4" opacity="0.35"/>
 </svg>`;
 
 let history = [];
 let busy = false;
-let currentModel = 'qwen3.5:9b';
+let currentModel = 'gemma4:e4b';
 
 function setModel(m) {
   currentModel = m;
-  document.getElementById('pill-qwen').classList.toggle('active', m === 'qwen3.5:9b');
   document.getElementById('pill-gemma').classList.toggle('active', m === 'gemma4:e4b');
+  document.getElementById('pill-qwen').classList.toggle('active', m === 'qwen3.5:9b');
 }
 
 function now() {
@@ -420,7 +420,7 @@ function hideTyping() {
   if (t) t.remove();
 }
 
-// 龐克風味的引導按鈕：充滿不服的情緒碰撞
+// 引導按鈕：幫助使用者快速開始對話
 function addChips() {
   const existing = document.getElementById('chips');
   if (existing) existing.remove();
@@ -428,14 +428,14 @@ function addChips() {
   const d = document.createElement('div');
   d.className = 'chips'; d.id = 'chips';
   
-  const punkChips = [
-    { label: '🖕 天天操才有氧？少騙人',       send: '天天操才有氧？少騙人' },
-    { label: '🧪 算什麼 VO2 Max 公式？',      send: '算什麼 VO2 Max 公式？' },
-    { label: '🥵 台灣夏天熱爆，心率噴掉怎練', send: '台灣夏天熱爆，心率噴掉怎練' },
-    { label: '🎸 跟我說怎麼排極化訓練',       send: '跟我說怎麼排極化訓練' }
+  const guideChips = [
+    { label: '💚 Zone 2 對我有什麼好處？',    send: 'Zone 2 對我有什麼好處？' },
+    { label: '💓 我的 Zone 2 心率怎麼算？',   send: '我的 Zone 2 心率怎麼算？' },
+    { label: '🌿 每週要練多久才有效？',       send: '每週要練多久才有效？' },
+    { label: '🚴 跑步和騎車哪個比較好入門？', send: '跑步和騎車哪個比較好入門？' }
   ];
 
-  punkChips.forEach(({ label, send }) => {
+  guideChips.forEach(({ label, send }) => {
     const c = document.createElement('div');
     c.className = 'chip';
     c.textContent = label;
@@ -478,10 +478,10 @@ async function send() {
     hideTyping();
     history.push({ role:'assistant', content:reply });
     addMsg('assistant', reply);
-    addChips(); // 每次回答完重新把引導晶片塞回去，延續戰火
+    addChips(); // 每次回答後重新顯示引導按鈕
   } catch {
     hideTyping();
-    addMsg('assistant','網路連不上。可能是你的 Local LLM 燒掉了，或者是你的 Cloudflare Worker 拒絕回答伸手牌蠢問題。檢查一下終端機。');
+    addMsg('assistant','目前連線有點問題，請稍後再試 🙏 如果持續發生，可以確認一下網路或 Worker 狀態。');
   }
   busy = false;
 }
@@ -520,7 +520,7 @@ if (window.visualViewport) {
 // Init
 document.getElementById('headerAvatar').innerHTML = AVATAR_SVG;
 
-addMsg('assistant', '老子是 **Zone2 大師**。\n別拿外面那些直銷或健身房速成的弱智公式來敷衍我。想提升粒線體和 FatMax，就老實拿你的數據出來碰撞。聽懂了就開口。 🎸');
+addMsg('assistant', '嗨，我是 **Zone2 大師** 🌿\n\n很高興你來了。Zone 2 有氧訓練或許不是最熱鬧的話題，卻是最值得你投入的長期投資。\n\n不管你現在跑步、騎車，還是剛開始考慮動起來，我都可以陪你聊聊怎麼讓每一步都踩在對的強度上。');
 addChips();
 </script>
 </body>
